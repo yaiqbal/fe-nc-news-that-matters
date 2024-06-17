@@ -40,3 +40,10 @@
 .read-the-docs {
   color: #888;
 }
+
+
+.heading-with-bg {
+  background-color: lightcyan;
+  padding: 10px;
+  text-align: left;
+}
