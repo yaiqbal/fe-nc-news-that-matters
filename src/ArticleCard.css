@@ -1,0 +1,27 @@
+.article-card {
+    width: 18rem; 
+    height: 100%; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between; 
+
+}
+
+.card-img {
+    height: 100px; 
+    object-fit: cover; 
+}
+
+.card-title {
+    font-size: 1rem;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+}
+
+.card-text {
+    font-size: 0.75rem; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+}
+
