@@ -1,34 +1,28 @@
 import axios from "axios";
 
-export const fetchArticles = () => {
-    return axios.get("https://news-that-matters.onrender.com/api/articles/")
-        .then(response => response.data.articles)
-        .catch(error => {
-            console.error("Error fetching articles", error);
-        });
+const NEWS_URL = "https://news-that-matters.onrender.com/api";
+
+export const fetchArticles = async () => {
+    const response = await axios.get(`${NEWS_URL}/articles`)
+    return response.data.articles
 };
 
 
-export const fetchArticleById = (articleId) => {
-    return axios.get(`https://news-that-matters.onrender.com/api/articles/${articleId}`)
-        .then(response => response.data.article[0])
-        .catch(error => {
-            console.error("Error fetching article", error);
-        });
+export const fetchArticleById = async (articleId) => {
+    const response = await axios.get(`${NEWS_URL}/articles/${articleId}`)
+    return response.data.article[0]
 };
 
-export const fetchCommentsForArticle = (articleId) => {
-    return axios.get(`https://news-that-matters.onrender.com/api/articles/${articleId}/comments`)
-        .then(response => response.data.comments)
-        .catch(error => {
-            console.error("Error fetching comments", error);
-        });
+export const fetchCommentsForArticle = async (articleId) => {
+    const response = await axios.get(`${NEWS_URL}/articles/${articleId}/comments`)
+    return response.data.comments
 };
 
-export const fetchTopics = () => {
-    return axios.get("https://news-that-matters.onrender.com/api/topics/")
-        .then(response => response.data.topics)
-        .catch(error => {
-            console.error("Error fetching topics", error);
-        });
+export const updateArticleVotes = async (articleId, newVotes ) => {
+    const response = await axios.patch(`${NEWS_URL}/articles/${articleId}`, {inc_votes : newVotes})
+    return response.data.article[0];
+}
+export const fetchTopics = async () => {
+    const response = await axios.get(`${NEWS_URL}/topics`)
+    return response.data.topics
 };
