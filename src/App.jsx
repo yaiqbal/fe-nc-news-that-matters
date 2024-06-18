@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import './App.css'
-import Header from './Header'
-import Topics from './Topics'
+import Header from './Components/Header'
+import Topics from './Components/Topics'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Articles from "./Articles";
-import ArticleView from "./ArticleView";
+import Articles from "./Components/Articles";
+import ArticleView from "./Components/ArticleView";
 
 function App() {
 

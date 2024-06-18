@@ -6,26 +6,30 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Card";
 import { Routes, Route, Link, useNavigate  } from "react-router-dom";
 import './ArticleCard.css'
-
+import { fetchArticles } from "../api"; 
 
 
 const Articles = () => {
 
     const [articles, setArticles] = useState([]);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
         useEffect(() => {
-            axios.get("https://news-that-matters.onrender.com/api/articles/")
-            .then(response => {
-                return response.data.articles
-            })
+            setLoading(true)
+            fetchArticles()
             .then(articles => {
                 setArticles(articles)
             })
             .catch(error => {
                 console.error("Error fetching articles", error);
+            })
+            .finally(() => {
+                setLoading(false); 
             });
         }, []);
+
+        if (loading) return <div>Loading articles...</div>;
 
         const handleButtonClick = (article_id) => {
             navigate(`/articles/${article_id}`);
@@ -43,7 +47,7 @@ const Articles = () => {
                                     <Card.Text><b>Author:</b> {article.author}</Card.Text>
                                     <Card.Text><b>Category:</b> {article.topic}</Card.Text>
                                     <Card.Text><b>Comments:</b> {article.comment_count}</Card.Text>
-                                    <Button variant="primary" onClick={ () => handleButtonClick(article.article_id)}>Read Article</Button>
+                                    <Button variant="primary" onClick={ () => handleButtonClick(article.article_id)}>Read Article & Comments</Button>
                                 </Card.Body>
                             </Card>
                         </Col>
