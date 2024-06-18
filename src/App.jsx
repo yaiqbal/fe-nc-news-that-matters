@@ -3,15 +3,22 @@ import './App.css'
 import Header from './Header'
 import Topics from './Topics'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Articles from "./Articles";
+import ArticleView from "./ArticleView";
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
+    <Router>
     <div>
-      <Header />
-      <Topics />
+        <Routes>
+            <Route path="/" element={[<Header key={1}/>, <Topics key={2} />]} />
+            <Route path="/articles" element={<Articles />} />
+            <Route path="/articles/:articleId" element={<ArticleView />} /> 
+        </Routes>
     </div>
+</Router>
   )
 
 }
