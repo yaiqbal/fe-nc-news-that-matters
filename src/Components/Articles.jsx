@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Card";
-import { Routes, Route, Link, useNavigate  } from "react-router-dom";
+import { useNavigate  } from "react-router-dom";
 import './ArticleCard.css'
 import { fetchArticles } from "../api"; 
 
