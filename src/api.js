@@ -28,6 +28,16 @@ export const postNewComment = async (articleId, newComment ) => {
     return response.data;
 }
 
+export const fetchUsers = async () => {
+    const response = await axios.get(`${NEWS_URL}/users`)
+    return response.data.users;
+}
+
+export const deleteComment = async(commentId) => {
+    const response = await axios.delete(`${NEWS_URL}/comments/${commentId}`)
+    return response.status
+}
+
 export const fetchTopics = async () => {
     const response = await axios.get(`${NEWS_URL}/topics`)
     return response.data.topics
