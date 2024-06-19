@@ -22,6 +22,12 @@ export const updateArticleVotes = async (articleId, newVotes ) => {
     const response = await axios.patch(`${NEWS_URL}/articles/${articleId}`, {inc_votes : newVotes})
     return response.data.article[0];
 }
+
+export const postNewComment = async (articleId, newComment ) => {
+    const response = await axios.post(`${NEWS_URL}/articles/${articleId}/comments`, newComment)
+    return response.data;
+}
+
 export const fetchTopics = async () => {
     const response = await axios.get(`${NEWS_URL}/topics`)
     return response.data.topics
