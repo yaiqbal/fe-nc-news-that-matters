@@ -3,11 +3,16 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import ListGroup from 'react-bootstrap/ListGroup';
-import { fetchArticleById, fetchCommentsForArticle, updateArticleVotes, postNewComment } from "../api";
+import { fetchArticleById, fetchCommentsForArticle, updateArticleVotes, postNewComment, fetchUsers, deleteComment } from "../api";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './ArticleView.css';
+
 
 const ArticleView = () => {
     const { articleId } = useParams();
@@ -15,6 +20,8 @@ const ArticleView = () => {
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [newComment, setNewComment] = useState("")
+    const [users, setUsers] = useState([])
+    const [selectedUser, setSelectedUser] = useState("User")
     const navigate = useNavigate();
 
 
@@ -27,6 +34,10 @@ const ArticleView = () => {
             })
             .then(comments => {
                 setComments(comments);
+                return fetchUsers();
+            })
+            .then(fetchedUsers => {
+                setUsers(fetchedUsers)
             })
             .catch(error => {
                 console.error("Error fetching article", error);
@@ -54,18 +65,55 @@ const ArticleView = () => {
     }
 
     const handleCommentSubmit = (event) => {
-        event.preventDefault();
-        const newCommentObj = {username: "tickle122", body : newComment}
-        setComments([newCommentObj, ...comments])
-        setNewComment('');
-        postNewComment(articleId, newCommentObj)
-            .catch(err => {
-                setComments(comments);
-                console.error("Error updating votes");
-            });
+
+        if(selectedUser !== "User") {
+            event.preventDefault();
+            const displayCommentObj = { author: selectedUser, body: newComment }
+            const postNewCommentObj = { username: selectedUser, body: newComment }
+            setComments([displayCommentObj, ...comments])
+            setNewComment('');
+            postNewComment(articleId, postNewCommentObj)
+                .then((comment) => {
+                    alert("new comment posted");
+                    // this is done since the new comment does not have a comment_id while doing optimistic rendering.
+                    // this is since comment_id is generated at BE.
+                    // if this is not done the newly added comment cannot be deleted until the page is refreshed and 
+                    // the fetching happens again
+                    return fetchCommentsForArticle(articleId)  
+                })
+                .then((comments) => {
+                    setComments(comments)
+                })
+                .catch(err => {
+                    setComments(comments);
+                    console.error("Error updating comment");
+                });
+        } else {
+            event.preventDefault();
+            alert("Please select user prior to posting comment");
+        }
     }
 
+    const handleSelectedUser = (user) => {
+        setSelectedUser(user);
+    }
 
+    const handleDeleteComment = (idx, commentId, commentAuthor) => {
+        if (commentAuthor === selectedUser) {
+            const updatedComments = comments.filter((comment, index) => index !== idx);
+            setComments(updatedComments);
+            deleteComment(commentId)
+            .then(responseStatus => {
+                alert("Comment deleted successfully")
+            })
+            .catch(err => {
+                setComments(comments);
+                console.error("Error deleting comment");
+            });
+        } else {
+            alert("Can only delete comments posted by you");
+        }
+    }
     return (
         <div>
             <h1>{article.title}</h1>
@@ -77,6 +125,16 @@ const ArticleView = () => {
             <Button onClick={() => handleVote(-1)}>
                 <FontAwesomeIcon icon={faThumbsDown} /> Downvote
             </Button>
+
+            <div className="user-dropdown">
+            <p><b>Logged in as</b></p>
+            <DropdownButton id="dropdown-basic-button" title={selectedUser} >
+                {users.map((user) => {
+                    return <Dropdown.Item key={user.username} onClick={ () => handleSelectedUser(user.username)}>{user.username}</Dropdown.Item>
+                })}
+            </DropdownButton>
+            </div>
+
             <h4 align="left"><b>Comments:</b></h4>
             <Form onSubmit={handleCommentSubmit}>
                 <InputGroup>
@@ -87,7 +145,10 @@ const ArticleView = () => {
             {
                 <ListGroup>
                     {comments.map((comment, idx) => {
-                        return <ListGroup.Item key={idx}>{comment.body}</ListGroup.Item>
+                        return <ListGroup.Item align="left" key={idx}>
+                            <b>{comment.author}</b> : {comment.body}
+                            <Button variant="danger" size="sm" onClick={ () => handleDeleteComment(idx, comment.comment_id, comment.author )}>Delete</Button>
+                        </ListGroup.Item>
                     })}
                 </ListGroup>
             }
