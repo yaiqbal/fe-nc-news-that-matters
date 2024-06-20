@@ -73,11 +73,11 @@ const ArticleView = () => {
             setComments([displayCommentObj, ...comments])
             setNewComment('');
             postNewComment(articleId, postNewCommentObj)
-                .then((comment) => {
-                    alert("new comment posted");
-                    // this is done since the new comment does not have a comment_id while doing optimistic rendering.
-                    // this is since comment_id is generated at BE.
-                    // if this is not done the newly added comment cannot be deleted until the page is refreshed and 
+                .then(() => {
+                    alert("New comment posted");
+                    // the below fetch is done since the new comment will not have a comment_id while doing optimistic rendering,
+                    // and that is since comment_id is generated at BE.
+                    // if this fetch is not done the newly added comment cannot be deleted until the page is refreshed and 
                     // the fetching happens again
                     return fetchCommentsForArticle(articleId)  
                 })
