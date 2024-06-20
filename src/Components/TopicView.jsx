@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchArticles } from "../api";
+import { fetchArticles, fetchTopics } from "../api";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Card from "react-bootstrap/Card";
@@ -21,8 +21,15 @@ const TopicView = () => {
 
     useEffect(() => {
         setLoading(true)
+        fetchTopics()
+            .then(topics => {
+                const topicSlugs = topics.map( topic => topic.slug)
+                if(!topicSlugs.includes(topic)) navigate(`/PageNotFound`)
+            }).catch(error => {
+                console.error("Error fetching articles", error);
+            });
         fetchArticles()
-            .then(articles => {
+            .then(articles => {        
                 const sortedArticles = [...articles].sort((prevElement, nextElement) => nextElement.comment_count - prevElement.comment_count);
                 setArticles(sortedArticles)
             })

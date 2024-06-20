@@ -12,6 +12,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ArticleView.css';
 import Comments from './Comments'
+import PageNotFound from "./PageNotFound";
 
 const ArticleView = () => {
     const { articleId } = useParams();
@@ -39,7 +40,8 @@ const ArticleView = () => {
                 setUsers(fetchedUsers)
             })
             .catch(error => {
-                console.error("Error fetching article", error);
+                console.error("Error fetching article", error.response.status);
+                navigate(`/PageNotFound`);
             })
             .finally(() => {
                 setLoading(false);
@@ -114,6 +116,7 @@ const ArticleView = () => {
         }
     }
     return (
+
         <div>
             <h1>{article.title}</h1>
             <p>{article.body}</p>
