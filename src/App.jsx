@@ -16,7 +16,7 @@ function App() {
             <Route path="/" element={[<Header key={1}/>, <Topics key={2} />]} />
             <Route path="/articles" element={<Articles />} />
             <Route path="/articles/:articleId" element={<ArticleView />} />
-            <Route path="/topics/:topic" element={<TopicView />} />
+            <Route path="/topics/:topic" element={<TopicView key={1}/>} />
         </Routes>
     </div>
 </Router>

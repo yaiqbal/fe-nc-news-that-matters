@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Button from "react-bootstrap/Button";
-import ListGroup from 'react-bootstrap/ListGroup';
 import { fetchArticleById, fetchCommentsForArticle, updateArticleVotes, postNewComment, fetchUsers, deleteComment } from "../api";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
@@ -12,7 +11,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ArticleView.css';
-
+import Comments from './Comments'
 
 const ArticleView = () => {
     const { articleId } = useParams();
@@ -142,16 +141,8 @@ const ArticleView = () => {
                     <Button type="submit">Submit comment</Button>
                 </InputGroup>
             </Form>
-            {
-                <ListGroup>
-                    {comments.map((comment, idx) => {
-                        return <ListGroup.Item align="left" key={idx}>
-                            <b>{comment.author}</b> : {comment.body}
-                            <Button variant="danger" size="sm" onClick={ () => handleDeleteComment(idx, comment.comment_id, comment.author )}>Delete</Button>
-                        </ListGroup.Item>
-                    })}
-                </ListGroup>
-            }
+
+            <Comments comments={comments} selectedUser={selectedUser} handleDeleteComment={handleDeleteComment}/>
             <Button variant="primary" onClick={() => navigate('/')}>Back to Home</Button>
         </div>
     );
