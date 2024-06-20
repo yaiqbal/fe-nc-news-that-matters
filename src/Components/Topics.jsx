@@ -17,7 +17,7 @@ const Topics = () => {
                 setTopics(topics)
             })
             .catch(error => {
-                console.error("There was an error fetching the articles!", error);
+                console.error("There was an error fetching topics!", error);
             });
     }, []);
 
