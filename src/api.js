@@ -42,3 +42,8 @@ export const fetchTopics = async () => {
     const response = await axios.get(`${NEWS_URL}/topics`)
     return response.data.topics
 };
+
+export const fetchArticlesByTopic = async (topic) => {
+    const response = await axios.get(`${NEWS_URL}/topics/${topic}`)
+    return response.data.topic
+};

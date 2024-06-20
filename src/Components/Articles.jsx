@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
 import { useNavigate  } from "react-router-dom";
 import './ArticleCard.css'
 import { fetchArticles } from "../api"; 
